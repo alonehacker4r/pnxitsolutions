@@ -30,8 +30,13 @@ import avatar3 from "@/assets/avatar-3.jpg";
 const LEAD_FORM = "https://forms.gle/QQqkHdaFjngTdGeg8";
 const SUPPORT_EMAIL = "pnxitsolutionssupport@gmail.com";
 const SUPPORT_WHATSAPP = "https://wa.me/+916388507400";
+<<<<<<< HEAD
 const LINKEDIN_URL = "https://linkedin.com/in/pnxitsolutioins";
 const INSTAGRAM_URL = "https://instagram.com/pnxitsolutions";
+=======
+const LINKEDIN_URL = "https://linkedin.com/in/yourprofile";
+const INSTAGRAM_URL = "https://instagram.com/yourhandle";
+>>>>>>> f51343d549b7af7f6d638dadcc7790c9fe64084e
 
 export const Route = createFileRoute("/")({
   head: () => ({
