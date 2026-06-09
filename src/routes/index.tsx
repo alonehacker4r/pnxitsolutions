@@ -1,3 +1,903 @@
+import { createFileRoute } from "@tanstack/react-router";
+import {
+  ArrowRight,
+  Globe,
+  Server,
+  Headphones,
+  Zap,
+  Wallet,
+  ShieldCheck,
+  MessageSquare,
+  Sparkles,
+  Rocket,
+  LifeBuoy,
+  Linkedin,
+  Instagram,
+  Mail,
+  Phone,
+  Menu,
+  X,
+  Star,
+  Target,
+  BadgeCheck,
+} from "lucide-react";
+import { useEffect, useState, type FormEvent } from "react";
+import pnxLogo from "@/assets/pnx-logo.png";
+import avatar1 from "@/assets/avatar-1.jpg";
+import avatar2 from "@/assets/avatar-2.jpg";
+import avatar3 from "@/assets/avatar-3.jpg";
+
+const GOOGLE_FORM_ACTION =
+  "https://docs.google.com/forms/d/e/1FAIpQLSfY1qFLexLGNf_8larSAxkELwn28Kkrnqmtf7b3yagBLDQFqQ/formResponse";
+const SUPPORT_EMAIL = "pnxitsolutionssupport@gmail.com";
+const SUPPORT_WHATSAPP = "https://wa.me/+916388507400";
+const LINKEDIN_URL = "https://linkedin.com/in/pnxitsolutioins";
+const INSTAGRAM_URL = "https://instagram.com/pnxitsolutions";
+const LEAD_SERVICES = [
+  "Website Development",
+  "Landing Page",
+  "Domain Registration",
+  "Web Hosting",
+  "Business Email Setup",
+  "Google Workspace",
+  "Microsoft 365",
+  "IT Support",
+  "Website Maintenance",
+];
+const CONTACT_METHODS = ["Phone Call", "Whatsapp", "Email"];
+
+type OpenLeadForm = () => void;
+
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "PNX IT Solutions — Smart IT Solutions for Growing Businesses" },
+      {
+        name: "description",
+        content:
+          "PNX IT Solutions builds websites, sets up hosting, domain & email, and provides IT support for small offices. Get a free consultation today.",
+      },
+      { property: "og:title", content: "PNX IT Solutions — Smart IT for Growing Businesses" },
+      {
+        property: "og:description",
+        content: "Websites, hosting, email setup and reliable IT support for small businesses.",
+      },
+      { property: "og:type", content: "website" },
+    ],
+  }),
+  component: Landing,
+});
+
+function Landing() {
+  const [leadFormOpen, setLeadFormOpen] = useState(false);
+  const openLeadForm = () => setLeadFormOpen(true);
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <Navbar onOpenLeadForm={openLeadForm} />
+      <main>
+        <Hero onOpenLeadForm={openLeadForm} />
+        <About />
+        <Services onOpenLeadForm={openLeadForm} />
+        <Process />
+        <Testimonials />
+        <Contact onOpenLeadForm={openLeadForm} />
+      </main>
+      <Footer onOpenLeadForm={openLeadForm} />
+      {leadFormOpen && <LeadFormModal onClose={() => setLeadFormOpen(false)} />}
+    </div>
+  );
+}
+
+/* ---------------- Navbar ---------------- */
+function Navbar({ onOpenLeadForm }: { onOpenLeadForm: OpenLeadForm }) {
+  const [open, setOpen] = useState(false);
+  const links = [
+    { href: "#about", label: "About" },
+    { href: "#services", label: "Services" },
+    { href: "#process", label: "Process" },
+    { href: "#testimonials", label: "Clients" },
+    { href: "#contact", label: "Contact" },
+  ];
+  return (
+    <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/60">
+      <div className="mx-auto max-w-6xl px-5 h-16 flex items-center justify-between">
+        <a href="#top" className="flex items-center gap-3 font-semibold tracking-tight">
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border border-primary/40 shadow-[0_0_18px_var(--glow)]">
+            <img src={pnxLogo} alt="PNX IT Solutions" className="w-full h-full object-cover" />
+          </div>
+        </a>
+        <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
+          {links.map((l) => (
+            <a key={l.href} href={l.href} className="hover:text-foreground transition-colors">
+              {l.label}
+            </a>
+          ))}
+        </nav>
+        <button
+          type="button"
+          onClick={onOpenLeadForm}
+          className="hidden md:inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:opacity-90 transition shadow-[0_0_24px_-6px_var(--glow)]"
+        >
+          Get Free Consultation <ArrowRight className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => setOpen((v) => !v)}
+          className="md:hidden p-2 rounded-md hover:bg-secondary"
+          aria-label="Toggle menu"
+        >
+          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </div>
+      {open && (
+        <div className="md:hidden border-t border-border/60 bg-background/95">
+          <div className="px-5 py-4 flex flex-col gap-4">
+            {links.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
+                {l.label}
+              </a>
+            ))}
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                onOpenLeadForm();
+              }}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-medium"
+            >
+              Get Free Consultation <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}
+
+/* ---------------- Hero ---------------- */
+function Hero({ onOpenLeadForm }: { onOpenLeadForm: OpenLeadForm }) {
+  return (
+    <section id="top" className="relative overflow-hidden">
+      <div className="absolute inset-0 glow-bg pointer-events-none" />
+      <div className="absolute inset-0 grid-bg pointer-events-none" />
+      <div className="relative mx-auto max-w-6xl px-5 pt-20 pb-24 md:pt-28 md:pb-32">
+        <div className="max-w-3xl animate-fade-up">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-3 py-1 text-xs text-muted-foreground">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-glow-pulse" />
+            Trusted IT partner for growing businesses
+          </div>
+          <h1 className="mt-6 text-4xl md:text-6xl font-semibold tracking-tight leading-[1.05]">
+            <span className="text-gradient">Smart IT Solutions</span>
+            <br />
+            for Growing Businesses
+          </h1>
+          <p className="mt-6 text-base md:text-lg text-muted-foreground max-w-2xl">
+            We build modern websites, set up hosting, domain & business email, and provide reliable
+            IT support so your team can focus on growth — not tech headaches.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={onOpenLeadForm}
+              className="group inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-medium hover:opacity-90 transition shadow-[0_0_40px_-10px_var(--glow)]"
+            >
+              Get Free Consultation
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition" />
+            </button>
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/40 px-6 py-3 text-sm font-medium hover:bg-secondary transition"
+            >
+              Contact Us
+            </a>
+          </div>
+
+          <div className="mt-12 grid grid-cols-3 gap-6 max-w-xl">
+            {[
+              { k: "24/7", v: "Support" },
+              { k: "50+", v: "Projects" },
+              { k: "100%", v: "Reliability" },
+            ].map((s) => (
+              <div key={s.v} className="card-glow rounded-xl px-4 py-3">
+                <div className="text-xl font-semibold">{s.k}</div>
+                <div className="text-xs text-muted-foreground">{s.v}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div
+          className="pointer-events-none absolute -right-10 top-24 w-72 h-72 rounded-full blur-3xl opacity-40 animate-float"
+          style={{ background: "radial-gradient(circle, var(--glow), transparent 60%)" }}
+        />
+        <div
+          className="pointer-events-none absolute right-40 bottom-10 w-64 h-64 rounded-full blur-3xl opacity-30 animate-float"
+          style={{
+            background: "radial-gradient(circle, var(--glow-2), transparent 60%)",
+            animationDelay: "1.5s",
+          }}
+        />
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- About / Trust ---------------- */
+function About() {
+  const trust = [
+    {
+      icon: Globe,
+      title: "Website & Landing Pages",
+      desc: "Conversion-focused websites that look premium and load fast.",
+    },
+    {
+      icon: Server,
+      title: "Hosting, Domain & Email Setup",
+      desc: "End-to-end setup with business email, security, and uptime.",
+    },
+    {
+      icon: Headphones,
+      title: "IT Support for Small Offices",
+      desc: "On-call support for hardware, networks, and everyday IT.",
+    },
+  ];
+  const why = [
+    { icon: Zap, title: "Fast Response", desc: "Quick turnaround on every request." },
+    { icon: Wallet, title: "Affordable Pricing", desc: "Transparent, SMB-friendly plans." },
+    { icon: ShieldCheck, title: "Reliable Support", desc: "We stay with you after delivery." },
+  ];
+
+  return (
+    <section id="about" className="relative py-24">
+      <div className="mx-auto max-w-6xl px-5">
+        <SectionHeader
+          eyebrow="About PNX"
+          title="A modern IT partner you can count on"
+          desc="From your first website to the email running your business, we handle the tech end-to-end so you can focus on customers."
+        />
+
+        <div className="grid md:grid-cols-3 gap-5 mt-12">
+          {trust.map((t) => (
+            <Card key={t.title} icon={t.icon} title={t.title} desc={t.desc} />
+          ))}
+        </div>
+
+        <div className="mt-20">
+          <h3 className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
+            Why Choose Us
+          </h3>
+          <div className="grid md:grid-cols-3 gap-5 mt-6">
+            {why.map((w) => (
+              <div key={w.title} className="card-glow rounded-2xl p-6 group">
+                <div className="flex items-center gap-3">
+                  <div className="grid place-items-center w-10 h-10 rounded-lg bg-secondary text-primary">
+                    <w.icon className="w-5 h-5" />
+                  </div>
+                  <div className="font-medium">{w.title}</div>
+                </div>
+                <p className="mt-3 text-sm text-muted-foreground">{w.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Services ---------------- */
+function Services({ onOpenLeadForm }: { onOpenLeadForm: OpenLeadForm }) {
+  const services = [
+    {
+      icon: Globe,
+      title: "Websites & Landing Pages",
+      desc: "Business websites, landing pages and portfolios — designed to convert visitors into leads.",
+      points: ["Responsive design", "SEO-ready", "Fast & secure"],
+    },
+    {
+      icon: LifeBuoy,
+      title: "IT Support for Small Offices",
+      desc: "Day-to-day IT help — workstations, printers, Wi-Fi, backups, and user issues.",
+      points: ["Remote & on-site", "Asset management", "Security basics"],
+    },
+    {
+      icon: Server,
+      title: "Cloud, Email, Domain & Hosting",
+      desc: "Domain registration, business email, hosting and cloud setup with proper configuration.",
+      points: ["Google / Microsoft 365", "DNS & SSL", "Backups & uptime"],
+    },
+  ];
+
+  return (
+    <section id="services" className="relative py-24 border-t border-border/60">
+      <div className="mx-auto max-w-6xl px-5">
+        <SectionHeader
+          eyebrow="Services"
+          title="Everything your business needs, in one place"
+          desc="Pick a single service or get the whole stack handled by one team."
+        />
+        <div className="grid md:grid-cols-3 gap-5 mt-12">
+          {services.map((s) => (
+            <div key={s.title} className="card-glow rounded-2xl p-6 flex flex-col group">
+              <div className="grid place-items-center w-11 h-11 rounded-xl bg-secondary text-primary shadow-[0_0_24px_-8px_var(--glow)]">
+                <s.icon className="w-5 h-5" />
+              </div>
+              <h3 className="mt-5 text-lg font-semibold">{s.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+              <ul className="mt-4 space-y-2 text-sm">
+                {s.points.map((p) => (
+                  <li key={p} className="flex items-center gap-2 text-muted-foreground">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary" /> {p}
+                  </li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                onClick={onOpenLeadForm}
+                className="mt-6 inline-flex items-center justify-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-2.5 text-sm font-medium hover:bg-primary hover:text-primary-foreground hover:border-primary transition"
+              >
+                Request Quote <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Process ---------------- */
+function Process() {
+  const steps = [
+    {
+      icon: MessageSquare,
+      title: "Share Your Requirement",
+      desc: "Tell us about your business and goals.",
+    },
+    {
+      icon: Sparkles,
+      title: "Get Free Consultation",
+      desc: "We propose the right plan and scope.",
+    },
+    { icon: Rocket, title: "Project Execution", desc: "We build, configure and test thoroughly." },
+    { icon: LifeBuoy, title: "Delivery & Support", desc: "We hand over and stay on standby." },
+  ];
+  return (
+    <section id="process" className="relative py-24 border-t border-border/60">
+      <div className="mx-auto max-w-6xl px-5">
+        <SectionHeader
+          eyebrow="Process"
+          title="A simple 4-step workflow"
+          desc="No back-and-forth confusion — just a clear path from idea to delivery."
+        />
+        <div className="grid md:grid-cols-4 gap-5 mt-12">
+          {steps.map((s, i) => (
+            <div key={s.title} className="card-glow rounded-2xl p-6 relative overflow-hidden group">
+              <div className="absolute right-4 top-3 text-6xl font-bold text-foreground/5 select-none">
+                0{i + 1}
+              </div>
+              <div className="grid place-items-center w-10 h-10 rounded-lg bg-secondary text-primary">
+                <s.icon className="w-5 h-5" />
+              </div>
+              <h3 className="mt-4 font-semibold">{s.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Testimonials ---------------- */
+function Testimonials() {
+  const reviews = [
+    {
+      quote:
+        "The team delivered our website quickly and professionally. The whole process felt smooth from day one.",
+      name: "Rohan Mehta",
+      business: "Founder, Mehta Traders",
+      avatar: avatar1,
+    },
+    {
+      quote:
+        "Great support for our business email and hosting setup. Everything just works and uptime has been perfect.",
+      name: "Ananya Sharma",
+      business: "Director, Sharma Interiors",
+      avatar: avatar2,
+    },
+    {
+      quote:
+        "Very responsive and reliable IT service partner. They genuinely care about our small business growth.",
+      name: "Vikram Singh",
+      business: "Owner, VS Logistics",
+      avatar: avatar3,
+    },
+  ];
+
+  const highlights = [
+    { icon: Zap, label: "Fast Response" },
+    { icon: ShieldCheck, label: "Reliable Support" },
+    { icon: Target, label: "Business-Focused Solutions" },
+    { icon: Wallet, label: "Affordable Pricing" },
+  ];
+
+  return (
+    <section id="testimonials" className="relative py-24 border-t border-border/60">
+      <div className="mx-auto max-w-6xl px-5">
+        <SectionHeader
+          eyebrow="Happy Clients"
+          title="What our clients say"
+          desc="Real feedback from small businesses we help every day."
+        />
+
+        <div className="grid md:grid-cols-3 gap-5 mt-12">
+          {reviews.map((r) => (
+            <div key={r.name} className="card-glow rounded-2xl p-6 flex flex-col">
+              <div className="flex items-center gap-1 text-primary">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
+                ))}
+              </div>
+              <p className="mt-4 text-sm text-muted-foreground leading-relaxed">"{r.quote}"</p>
+              <div className="mt-6 pt-4 border-t border-border/60 flex items-center gap-3">
+                <img
+                  src={r.avatar}
+                  alt={r.name}
+                  loading="lazy"
+                  width={48}
+                  height={48}
+                  className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/40 shadow-[0_0_18px_-4px_var(--glow)]"
+                />
+                <div className="min-w-0">
+                  <div className="font-medium text-sm">{r.name}</div>
+                  <div className="text-xs text-muted-foreground">{r.business}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-3">
+          {highlights.map((h) => (
+            <div key={h.label} className="card-glow rounded-xl px-4 py-4 flex items-center gap-3">
+              <div className="grid place-items-center w-9 h-9 rounded-lg bg-secondary text-primary">
+                <h.icon className="w-4 h-4" />
+              </div>
+              <div className="text-sm font-medium">{h.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Contact ---------------- */
+function Contact({ onOpenLeadForm }: { onOpenLeadForm: OpenLeadForm }) {
+  const channels = [
+    { icon: Linkedin, label: "LinkedIn", href: LINKEDIN_URL },
+    { icon: Instagram, label: "Instagram", href: INSTAGRAM_URL },
+    { icon: Phone, label: "WhatsApp", href: SUPPORT_WHATSAPP },
+    { icon: Mail, label: "Email", href: `mailto:${SUPPORT_EMAIL}` },
+  ];
+  return (
+    <section id="contact" className="relative py-24 border-t border-border/60">
+      <div className="absolute inset-0 glow-bg opacity-60 pointer-events-none" />
+      <div className="relative mx-auto max-w-5xl px-5">
+        <div className="card-glow rounded-3xl p-8 md:p-14 text-center relative overflow-hidden">
+          <div
+            className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full blur-3xl opacity-40"
+            style={{ background: "radial-gradient(circle, var(--glow), transparent 60%)" }}
+          />
+          <div className="relative">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 px-3 py-1 text-xs text-muted-foreground">
+              Let's talk
+            </div>
+            <h2 className="mt-4 text-3xl md:text-5xl font-semibold tracking-tight">
+              Ready to <span className="text-gradient">grow your business</span> with us?
+            </h2>
+            <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
+              Fill the lead form and we'll get back to you within one business day with a free
+              consultation.
+            </p>
+            <button
+              type="button"
+              onClick={onOpenLeadForm}
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-8 py-4 text-base font-semibold hover:opacity-90 transition shadow-[0_0_60px_-10px_var(--glow)]"
+            >
+              Fill the Lead Form <ArrowRight className="w-5 h-5" />
+            </button>
+
+            <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-2xl mx-auto">
+              {channels.map((c) => (
+                <a
+                  key={c.label}
+                  href={c.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex items-center justify-center gap-2 rounded-xl border border-border bg-secondary/40 px-4 py-3 text-sm hover:border-primary/60 hover:bg-secondary transition"
+                >
+                  <c.icon className="w-4 h-4 text-primary" />
+                  <span>{c.label}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Support card */}
+        <div className="mt-8 grid md:grid-cols-2 gap-5">
+          <a
+            href={`mailto:${SUPPORT_EMAIL}`}
+            className="card-glow rounded-2xl p-6 flex items-center gap-4 group"
+          >
+            <div className="grid place-items-center w-12 h-12 rounded-xl bg-secondary text-primary shadow-[0_0_24px_-8px_var(--glow)]">
+              <Mail className="w-5 h-5" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                Support Email
+              </div>
+              <div className="mt-1 font-medium truncate group-hover:text-primary transition">
+                {SUPPORT_EMAIL}
+              </div>
+            </div>
+          </a>
+          <a
+            href={SUPPORT_WHATSAPP}
+            target="_blank"
+            rel="noreferrer"
+            className="card-glow rounded-2xl p-6 flex items-center gap-4 group"
+          >
+            <div className="grid place-items-center w-12 h-12 rounded-xl bg-secondary text-primary shadow-[0_0_24px_-8px_var(--glow)]">
+              <Phone className="w-5 h-5" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                Support WhatsApp
+              </div>
+              <div className="mt-1 font-medium group-hover:text-primary transition">
+                +91 63885 07400
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Lead Form Modal ---------------- */
+function LeadFormModal({ onClose }: { onClose: () => void }) {
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [selectedContactMethods, setSelectedContactMethods] = useState<string[]>([]);
+  const [otherServiceSelected, setOtherServiceSelected] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [onClose]);
+
+  const toggleValue = (
+    value: string,
+    values: string[],
+    setValues: (nextValues: string[]) => void,
+  ) => {
+    setValues(
+      values.includes(value) ? values.filter((item) => item !== value) : [...values, value],
+    );
+    setFormError("");
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const form = event.currentTarget;
+    const otherService = new FormData(form).get("entry.2110211407.other_option_response");
+
+    if (selectedServices.length === 0 && !otherServiceSelected) {
+      event.preventDefault();
+      setFormError("Please select at least one service.");
+      return;
+    }
+
+    if (otherServiceSelected && !String(otherService ?? "").trim()) {
+      event.preventDefault();
+      setFormError("Please enter the other service you need.");
+      return;
+    }
+
+    if (selectedContactMethods.length === 0) {
+      event.preventDefault();
+      setFormError("Please select at least one preferred contact method.");
+      return;
+    }
+
+    setFormError("");
+    setSubmitting(true);
+    setSubmitted(true);
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-background/85 p-3 backdrop-blur-md md:p-6"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="lead-form-title"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <div className="relative max-h-[94vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-border bg-card shadow-[0_24px_100px_-28px_var(--glow)]">
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full border border-border bg-secondary/90 text-muted-foreground transition hover:border-primary/60 hover:text-foreground"
+          aria-label="Close lead form"
+        >
+          <X className="h-5 w-5" />
+        </button>
+
+        {success ? (
+          <div className="px-6 py-16 text-center md:px-12 md:py-20">
+            <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-primary/15 text-3xl text-primary shadow-[0_0_40px_-10px_var(--glow)]">
+              ✓
+            </div>
+            <h2 id="lead-form-title" className="mt-6 text-3xl font-semibold tracking-tight">
+              Thank you for contacting us
+            </h2>
+            <p className="mx-auto mt-3 max-w-md text-muted-foreground">
+              Your request has been received. Our team will contact you within 24 hours.
+            </p>
+            <button
+              type="button"
+              onClick={onClose}
+              className="mt-8 inline-flex items-center justify-center rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+            >
+              Done
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="border-b border-border/60 px-6 py-7 pr-16 md:px-10 md:py-8">
+              <div className="text-xs uppercase tracking-[0.2em] text-primary/80">
+                Free Consultation
+              </div>
+              <h2
+                id="lead-form-title"
+                className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl"
+              >
+                Tell us what your business needs
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Fill in the details below. You will stay on this website, and our team will respond
+                within 24 hours.
+              </p>
+            </div>
+
+            <form
+              action={GOOGLE_FORM_ACTION}
+              method="POST"
+              target="google-form-response"
+              onSubmit={handleSubmit}
+              className="space-y-7 px-6 py-7 md:px-10 md:py-9"
+            >
+              <div className="grid gap-5 md:grid-cols-2">
+                <LeadTextField
+                  label="Full Name"
+                  name="entry.1009153451"
+                  autoComplete="name"
+                  placeholder="Your full name"
+                  required
+                />
+                <LeadTextField
+                  label="Company / Business Name"
+                  name="entry.1446244688"
+                  autoComplete="organization"
+                  placeholder="Your business name"
+                  required
+                />
+                <LeadTextField
+                  label="Mobile Number"
+                  name="entry.353519854"
+                  type="tel"
+                  autoComplete="tel"
+                  inputMode="tel"
+                  placeholder="+91 98765 43210"
+                  required
+                />
+                <LeadTextField
+                  label="Email Address"
+                  name="entry.1645917223"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@company.com"
+                  required
+                />
+              </div>
+
+              <fieldset>
+                <legend className="text-sm font-medium">
+                  What Service Do You Need? <span className="text-primary">*</span>
+                </legend>
+                <div className="mt-3 grid gap-2 sm:grid-cols-2 md:grid-cols-3">
+                  {LEAD_SERVICES.map((service) => (
+                    <LeadCheckbox
+                      key={service}
+                      label={service}
+                      name="entry.2110211407"
+                      value={service}
+                      checked={selectedServices.includes(service)}
+                      onChange={() => toggleValue(service, selectedServices, setSelectedServices)}
+                    />
+                  ))}
+                  <LeadCheckbox
+                    label="Other"
+                    name="entry.2110211407"
+                    value="__other_option__"
+                    checked={otherServiceSelected}
+                    onChange={() => {
+                      setOtherServiceSelected((value) => !value);
+                      setFormError("");
+                    }}
+                  />
+                </div>
+                {otherServiceSelected && (
+                  <input
+                    name="entry.2110211407.other_option_response"
+                    type="text"
+                    placeholder="Tell us the other service"
+                    className="mt-3 w-full rounded-xl border border-input bg-secondary/50 px-4 py-3 text-sm outline-none transition placeholder:text-muted-foreground/70 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  />
+                )}
+              </fieldset>
+
+              <label className="block text-sm font-medium">
+                Do You Already Have a Website? <span className="text-primary">*</span>
+                <select
+                  name="entry.1587210001"
+                  required
+                  defaultValue=""
+                  className="mt-2 w-full rounded-xl border border-input bg-secondary px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                >
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                  <option value="Need a New Website">Need a New Website</option>
+                </select>
+              </label>
+
+              <label className="block text-sm font-medium">
+                Tell Us About Your Requirement
+                <textarea
+                  name="entry.761720841"
+                  rows={4}
+                  placeholder="Briefly describe your requirement, goals, or timeline"
+                  className="mt-2 w-full resize-y rounded-xl border border-input bg-secondary/50 px-4 py-3 text-sm outline-none transition placeholder:text-muted-foreground/70 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+              </label>
+
+              <fieldset>
+                <legend className="text-sm font-medium">
+                  Preferred Contact Method <span className="text-primary">*</span>
+                </legend>
+                <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                  {CONTACT_METHODS.map((method) => (
+                    <LeadCheckbox
+                      key={method}
+                      label={method}
+                      name="entry.1615125626"
+                      value={method}
+                      checked={selectedContactMethods.includes(method)}
+                      onChange={() =>
+                        toggleValue(method, selectedContactMethods, setSelectedContactMethods)
+                      }
+                    />
+                  ))}
+                </div>
+              </fieldset>
+
+              {formError && (
+                <p className="rounded-xl border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                  {formError}
+                </p>
+              )}
+
+              <input type="hidden" name="fvv" value="1" />
+              <input type="hidden" name="pageHistory" value="0" />
+              <button
+                type="submit"
+                disabled={submitting}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_0_40px_-12px_var(--glow)] transition hover:opacity-90 disabled:cursor-wait disabled:opacity-70"
+              >
+                {submitting ? "Submitting..." : "Request Free Consultation"}
+                {!submitting && <ArrowRight className="h-4 w-4" />}
+              </button>
+              <p className="text-center text-xs text-muted-foreground">
+                Your details are submitted securely to PNX IT Solutions.
+              </p>
+            </form>
+          </>
+        )}
+
+        <iframe
+          title="Google Form response"
+          name="google-form-response"
+          className="hidden"
+          onLoad={() => {
+            if (submitted) {
+              setSubmitting(false);
+              setSuccess(true);
+            }
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- Footer ---------------- */
+function Footer({ onOpenLeadForm }: { onOpenLeadForm: OpenLeadForm }) {
+  return (
+    <footer className="border-t border-border/60 py-12">
+      <div className="mx-auto max-w-6xl px-5 grid gap-8 md:grid-cols-3">
+        <div>
+          <div className="flex items-center">
+            <div className="w-16 h-16 rounded-full overflow-hidden border border-primary/40 shadow-[0_0_18px_var(--glow)]">
+              <img src={pnxLogo} alt="PNX IT Solutions" className="w-full h-full object-cover" />
+            </div>
+          </div>
+          <p className="mt-3 text-sm text-muted-foreground max-w-xs">
+            Your trusted IT & cloud partner — smart IT for growing businesses.
+          </p>
+          <div className="mt-4 flex items-center gap-3">
+            <a
+              href={LINKEDIN_URL}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+              className="grid place-items-center w-9 h-9 rounded-lg border border-border bg-secondary/40 hover:border-primary/60 hover:text-primary transition"
+            >
+              <Linkedin className="w-4 h-4" />
+            </a>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram"
+              className="grid place-items-center w-9 h-9 rounded-lg border border-border bg-secondary/40 hover:border-primary/60 hover:text-primary transition"
+            >
+              <Instagram className="w-4 h-4" />
+            </a>
+            <a
+              href={SUPPORT_WHATSAPP}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="WhatsApp"
+              className="grid place-items-center w-9 h-9 rounded-lg border border-border bg-secondary/40 hover:border-primary/60 hover:text-primary transition"
+            >
+              <Phone className="w-4 h-4" />
+            </a>
             <a
               href={`mailto:${SUPPORT_EMAIL}`}
               aria-label="Email"
