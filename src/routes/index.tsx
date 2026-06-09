@@ -582,13 +582,14 @@ function LeadFormModal({ onClose }: { onClose: () => void }) {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") setIsClosing(true);
     };
     window.addEventListener("keydown", closeOnEscape);
 
@@ -596,7 +597,7 @@ function LeadFormModal({ onClose }: { onClose: () => void }) {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", closeOnEscape);
     };
-  }, [onClose]);
+  }, []);
 
   const toggleValue = (
     value: string,
@@ -638,18 +639,27 @@ function LeadFormModal({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-background/85 p-3 backdrop-blur-md md:p-6"
+      className={`lead-form-backdrop fixed inset-0 z-[100] flex items-center justify-center bg-background/85 p-3 backdrop-blur-md md:p-6 ${
+        isClosing ? "lead-form-backdrop-closing" : ""
+      }`}
       role="dialog"
       aria-modal="true"
       aria-labelledby="lead-form-title"
       onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
+        if (event.target === event.currentTarget) setIsClosing(true);
       }}
     >
-      <div className="relative max-h-[94vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-border bg-card shadow-[0_24px_100px_-28px_var(--glow)]">
+      <div
+        className={`lead-form-page relative max-h-[94vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-border bg-card shadow-[0_24px_100px_-28px_var(--glow)] ${
+          isClosing ? "lead-form-page-closing" : "lead-form-page-opening"
+        }`}
+        onAnimationEnd={(event) => {
+          if (isClosing && event.currentTarget === event.target) onClose();
+        }}
+      >
         <button
           type="button"
-          onClick={onClose}
+          onClick={() => setIsClosing(true)}
           className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full border border-border bg-secondary/90 text-muted-foreground transition hover:border-primary/60 hover:text-foreground"
           aria-label="Close lead form"
         >
@@ -669,7 +679,7 @@ function LeadFormModal({ onClose }: { onClose: () => void }) {
             </p>
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => setIsClosing(true)}
               className="mt-8 inline-flex items-center justify-center rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
             >
               Done
